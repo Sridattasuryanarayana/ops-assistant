@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Problem Helper</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+        }
+        
+        .status-dot.green { background: #4CAF50; }
+        .status-dot.red { background: #f44336; }
+        .status-dot.yellow { background: #ff9800; }
+        
+        /* Main Card */
+        .main-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        /* Mode Tabs */
+        .mode-tabs {
+            display: flex;
+            background: #f5f5f5;
+        }
+        
+        .mode-tab {
+            flex: 1;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: #e0e0e0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .mode-tab:hover {
+            background: #d0d0d0;
+        }
+        
+        .mode-tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .mode-tab .emoji {
+            margin-right: 8px;
+        }
+        
+        /* Content Area */
+        .content {
+            padding: 30px;
+        }
+        
+        .mode-content {
+            display: none;
+        }
+        
+        .mode-content.active {
+            display: block;
+        }
+        
+        /* ============= EASY MODE STYLES ============= */
+        .step-box {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .help-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            border-left: 3px solid #ff9800;
+        }
+        
+        .help-text strong {
+            color: #ff9800;
+        }
+        
+        .optional-badge {
+            background: #e0e0e0;
+            color: #666;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
+        
+        /* Form Styles */
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        /* Example Buttons */
+        .example-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .example-btn {
+            background: #e8eaf6;
+            color: #667eea;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .example-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Results Section */
+        .results-container {
+            display: none;
+        }
+        
+        .results-container.active {
+            display: block;
+        }
+        
+        .result-card {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .result-card.priority { border-left-color: #f44336; }
+        .result-card.cause { border-left-color: #ff9800; }
+        .result-card.solution { border-left-color: #4CAF50; }
+        
+        .result-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        /* Priority Badges */
+        .priority-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .priority-p1, .priority-P1 { background: #ffcdd2; color: #c62828; }
+        .priority-p2, .priority-P2 { background: #ffe0b2; color: #e65100; }
+        .priority-p3, .priority-P3 { background: #fff9c4; color: #f57f17; }
+        .priority-p4, .priority-P4 { background: #e0e0e0; color: #616161; }
+        
+        /* Action List */
+        .action-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .action-list li {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .action-num {
+            background: #4CAF50;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        /* Draft Response Box */
+        .draft-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #5a6fd6;
+        }
+        
+        /* Error Box */
+        .error-box {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .error-box.active {
+            display: block;
+        }
+        
+        /* Advanced Mode Grid */
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .advanced-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔧 IT Problem Helper</h1>
+            <p>Describe your problem and get instant solutions!</p>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot" id="serverStatus"></span>
+                <span>Server: <span id="serverText">Checking...</span></span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="aiStatus"></span>
+                <span>AI: <span id="aiText">Checking...</span></span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="dbStatus"></span>
+                <span>Knowledge Base: <span id="docCount">-</span> documents</span>
+            </div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Mode Tabs -->
+            <div class="mode-tabs">
+                <button class="mode-tab active" onclick="switchMode('easy')">
+                    <span class="emoji">😊</span> Easy Mode
+                    <br><small style="font-weight: normal; font-size: 12px;">Step-by-step guide</small>
+                </button>
+                <button class="mode-tab" onclick="switchMode('advanced')">
+                    <span class="emoji">⚙️</span> Advanced Mode
+                    <br><small style="font-weight: normal; font-size: 12px;">Full features for IT staff</small>
+                </button>
+            </div>
+            
+            <div class="content">
+                <!-- ==================== EASY MODE ==================== -->
+                <div id="easyMode" class="mode-content active">
+                    <form id="easyForm">
+                        <!-- Step 1 -->
+                        <div class="step-box">
+                            <div class="step-header">
+                                <span class="step-number">1</span>
+                                <span class="step-title">What's the problem? (Short title)</span>
+                            </div>
+                            <div class="help-text">
+                                <strong>💡 Tip:</strong> Write a short title like "Website is slow" or "Cannot login"
+                            </div>
+                            <input type="text" id="easyTitle" placeholder="Example: Website is not loading" required>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="step-box">
+                            <div class="step-header">
+                                <span class="step-number">2</span>
+                                <span class="step-title">Tell us more details</span>
+                            </div>
+                            <div class="help-text">
+                                <strong>💡 Include:</strong> When did it start? How many people affected? What were you trying to do?
+                            </div>
+                            <textarea id="easyDescription" placeholder="Example: Since 2 PM today, about 50 users cannot open the company website. It shows a blank page. Everything was working fine in the morning." required></textarea>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="step-box" style="background: #f5f5f5; border-left-color: #9e9e9e;">
+                            <div class="step-header">
+                                <span class="step-number" style="background: #9e9e9e;">3</span>
+                                <span class="step-title">Any error messages?</span>
+                                <span class="optional-badge">OPTIONAL</span>
+                            </div>
+                            <div class="help-text">
+                                <strong>💡 Tip:</strong> If you see any error codes or red messages, copy them here. Skip if none.
+                            </div>
+                            <textarea id="easyLogs" placeholder="Example: Error 500 - Internal Server Error" style="min-height: 80px;"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="easySubmitBtn">
+                            🔍 Analyze My Problem
+                        </button>
+                    </form>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 10px;">
+                        <strong>📋 Try an example:</strong>
+                        <div class="example-buttons">
+                            <button type="button" class="example-btn" onclick="loadExample('slow', 'easy')">Slow Website</button>
+                            <button type="button" class="example-btn" onclick="loadExample('login', 'easy')">Login Problem</button>
+                            <button type="button" class="example-btn" onclick="loadExample('email', 'easy')">Email Not Working</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ==================== ADVANCED MODE ==================== -->
+                <div id="advancedMode" class="mode-content">
+                    <form id="advancedForm">
+                        <div class="advanced-grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="advTicketId">Ticket ID</label>
+                                    <input type="text" id="advTicketId" placeholder="INC001234" value="INC001234">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="advTitle">Title</label>
+                                    <input type="text" id="advTitle" placeholder="Brief description of the incident" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="advDescription">Description</label>
+                                    <textarea id="advDescription" placeholder="Detailed incident description including symptoms, affected systems, timeline, and impact..." required></textarea>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="form-group">
+                                    <label for="advLogs">Logs / Error Messages</label>
+                                    <textarea id="advLogs" placeholder="Paste relevant log snippets, stack traces, or error messages here..." style="min-height: 200px;"></textarea>
+                                </div>
+                                
+                                <div style="margin-top: 15px;">
+                                    <strong>Quick Examples:</strong>
+                                    <div class="example-buttons">
+                                        <button type="button" class="example-btn" onclick="loadExample('db', 'advanced')">DB Timeout</button>
+                                        <button type="button" class="example-btn" onclick="loadExample('memory', 'advanced')">Memory Leak</button>
+                                        <button type="button" class="example-btn" onclick="loadExample('cpu', 'advanced')">High CPU</button>
+                                        <button type="button" class="example-btn" onclick="loadExample('kafka', 'advanced')">Kafka Lag</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="advSubmitBtn" style="margin-top: 20px;">
+                            🔍 Analyze Ticket
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- ==================== LOADING ==================== -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Analyzing your problem...</h3>
+                    <p style="color: #666;">The AI is reading your description and searching for solutions.</p>
+                    <p style="color: #999; font-size: 14px; margin-top: 10px;">This usually takes 10-30 seconds</p>
+                </div>
+                
+                <!-- ==================== ERROR ==================== -->
+                <div class="error-box" id="errorBox">
+                    <strong>⚠️ Something went wrong</strong>
+                    <p id="errorText" style="margin-top: 10px;"></p>
+                    <p style="margin-top: 15px; font-size: 14px;">
+                        <strong>Troubleshooting:</strong><br>
+                        1. Make sure the server is running (check status bar above)<br>
+                        2. Try refreshing this page<br>
+                        3. Check if the server address is: http://localhost:8000
+                    </p>
+                    <button class="btn-secondary" onclick="hideError()" style="margin-top: 15px;">Try Again</button>
+                </div>
+                
+                <!-- ==================== RESULTS ==================== -->
+                <div class="results-container" id="results">
+                    <h2 style="text-align: center; margin-bottom: 25px; color: #333;">
+                        📊 Analysis Complete!
+                    </h2>
+                    
+                    <!-- Priority Card -->
+                    <div class="result-card priority">
+                        <h3>🚨 How Serious Is This?</h3>
+                        <div class="result-item">
+                            <div class="result-label">Priority Level</div>
+                            <div class="result-value">
+                                <span class="priority-badge" id="resPriority">-</span>
+                                <span id="resPriorityExplain" style="margin-left: 10px; color: #666;"></span>
+                            </div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Category</div>
+                            <div class="result-value" id="resCategory">-</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Summary</div>
+                            <div class="result-value" id="resSummary">-</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Reasoning</div>
+                            <div class="result-value" id="resReasoning" style="font-size: 14px; color: #666;">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Root Cause Card -->
+                    <div class="result-card cause">
+                        <h3>🔍 Why Did This Happen?</h3>
+                        <div class="result-item">
+                            <div class="result-label">Main Cause</div>
+                            <div class="result-value" id="resCause">-</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Other Factors</div>
+                            <div class="result-value" id="resFactors">-</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Evidence</div>
+                            <div class="result-value" id="resEvidence" style="font-size: 14px;">-</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">AI Confidence</div>
+                            <div class="result-value" id="resConfidence">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Solution Card -->
+                    <div class="result-card solution">
+                        <h3>✅ How To Fix It</h3>
+                        <div class="result-item">
+                            <div class="result-label">Steps to Follow</div>
+                            <ul class="action-list" id="resActions"></ul>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Estimated Time to Fix</div>
+                            <div class="result-value" id="resTime">-</div>
+                        </div>
+                        <div class="result-item" id="resRunbookItem" style="display: none;">
+                            <div class="result-label">Related Runbook</div>
+                            <div class="result-value" id="resRunbook">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Draft Response Card -->
+                    <div class="result-card" style="border-left-color: #2196F3;">
+                        <h3>💬 Ready-to-Send Response</h3>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                            Copy this message and send it to the person who reported the problem:
+                        </p>
+                        <div class="draft-box" id="resDraft">-</div>
+                        <button class="copy-btn" onclick="copyDraft()">
+                            📋 Copy to Clipboard
+                        </button>
+                    </div>
+                    
+                    <!-- Similar Incidents (if any) -->
+                    <div class="result-card" id="resSimilarCard" style="border-left-color: #9c27b0; display: none;">
+                        <h3>🔗 Similar Past Incidents</h3>
+                        <div id="resSimilar"></div>
+                    </div>
+                    
+                    <!-- New Analysis Button -->
+                    <button class="btn-primary" onclick="resetForm()" style="margin-top: 20px; background: linear-gradient(135deg, #4CAF50, #45a049);">
+                        ➕ Analyze Another Problem
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>API Server: <a href="http://localhost:8000/docs" target="_blank">http://localhost:8000/docs</a></p>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let currentMode = 'easy';
+        
+        // Example data
+        const examples = {
+            // Easy mode examples
+            slow: {
+                title: "Website is very slow",
+                description: "Since about 2 PM today, many people are saying the company website takes 30 seconds to load. Some people can't open it at all. It was working fine this morning. About 50 employees have complained so far."
+            },
+            login: {
+                title: "Cannot login to system",
+                description: "I'm trying to login to my work computer but it keeps saying 'Invalid credentials'. I haven't changed my password. This started happening this morning. Other people in my department have the same problem."
+            },
+            email: {
+                title: "Email not sending",
+                description: "When I try to send emails, they stay in my outbox and never send. I can receive emails but not send them. This has been happening since yesterday. At least 10 people in the office have this problem."
+            },
+            // Advanced mode examples
+            db: {
+                title: "Database connection timeout in production",
+                description: "Users reporting slow response times and timeout errors. Application logs show 'Connection pool exhausted' errors. Started after traffic spike at 14:00 UTC. Approximately 40% of requests are failing.",
+                logs: "2024-01-15 14:02:15 ERROR [db-pool] Connection pool exhausted, max connections: 50\n2024-01-15 14:02:18 WARN [query] Slow query detected: 12.5s\n2024-01-15 14:02:20 ERROR [app] Request timeout after 30s"
+            },
+            memory: {
+                title: "Memory leak in payment service",
+                description: "Payment service pods restarting every 4 hours due to OOMKilled. Memory usage grows linearly from 2GB to 8GB limit. No recent deployments. Heap dumps show growing collection of HTTP response objects.",
+                logs: "kubernetes: Pod payment-service-abc123 OOMKilled\nMemory usage at restart: 7.8GB / 8GB\nHeap analysis: 45% HttpConnection objects (not GC'd)"
+            },
+            cpu: {
+                title: "High CPU usage on web servers",
+                description: "All web server instances showing 95%+ CPU utilization. Response times degraded from 200ms to 5+ seconds. No recent deployments. Started around 10 AM when a new marketing campaign launched.",
+                logs: "top - load average: 47.5, 45.2, 40.1\nCPU: 98% user, 2% system\nMost CPU: nginx worker processes"
+            },
+            kafka: {
+                title: "Kafka consumer lag increasing rapidly",
+                description: "Order processing consumer group showing 50k+ message backlog. Orders not being processed within 5-minute SLA. Consumer instances appear healthy but not keeping up with message rate.",
+                logs: "Consumer lag (order-processor): 52341 messages\nPartition 0: 15000, Partition 1: 18000, Partition 2: 19341\nConsumer rate: 100 msg/s, Producer rate: 500 msg/s"
+            }
+        };
+        
+        // Switch between Easy and Advanced mode
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update tabs
+            document.querySelectorAll('.mode-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.mode-tab').classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.mode-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            
+            // Hide results when switching
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('errorBox').classList.remove('active');
+        }
+        
+        // Load example
+        function loadExample(type, mode) {
+            const example = examples[type];
+            
+            if (mode === 'easy') {
+                document.getElementById('easyTitle').value = example.title;
+                document.getElementById('easyDescription').value = example.description;
+                document.getElementById('easyLogs').value = example.logs || '';
+            } else {
+                document.getElementById('advTitle').value = example.title;
+                document.getElementById('advDescription').value = example.description;
+                document.getElementById('advLogs').value = example.logs || '';
+            }
+        }
+        
+        // Check server health
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                
+                document.getElementById('serverStatus').className = 'status-dot green';
+                document.getElementById('serverText').textContent = 'Connected';
+                
+                document.getElementById('aiStatus').className = 'status-dot ' + (data.llm_available ? 'green' : 'red');
+                document.getElementById('aiText').textContent = data.llm_available ? 'Ready' : 'Not Available';
+                
+                document.getElementById('dbStatus').className = 'status-dot ' + (data.documents_indexed > 0 ? 'green' : 'yellow');
+                document.getElementById('docCount').textContent = data.documents_indexed;
+                
+            } catch (e) {
+                document.getElementById('serverStatus').className = 'status-dot red';
+                document.getElementById('serverText').textContent = 'Not Connected';
+                document.getElementById('aiStatus').className = 'status-dot red';
+                document.getElementById('aiText').textContent = 'Unavailable';
+                document.getElementById('dbStatus').className = 'status-dot red';
+                document.getElementById('docCount').textContent = '-';
+            }
+        }
+        
+        // Submit form (Easy mode)
+        document.getElementById('easyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await analyzeTicket({
+                ticket_id: 'TICKET-' + Date.now(),
+                title: document.getElementById('easyTitle').value,
+                description: document.getElementById('easyDescription').value,
+                logs: document.getElementById('easyLogs').value || null
+            });
+        });
+        
+        // Submit form (Advanced mode)
+        document.getElementById('advancedForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await analyzeTicket({
+                ticket_id: document.getElementById('advTicketId').value,
+                title: document.getElementById('advTitle').value,
+                description: document.getElementById('advDescription').value,
+                logs: document.getElementById('advLogs').value || null
+            });
+        });
+        
+        // Analyze ticket
+        async function analyzeTicket(data) {
+            // Hide forms & results, show loading
+            document.getElementById('easyMode').classList.remove('active');
+            document.getElementById('advancedMode').classList.remove('active');
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('errorBox').classList.remove('active');
+            document.getElementById('loading').classList.add('active');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Server returned error: ' + response.status);
+                }
+                
+                const result = await response.json();
+                displayResults(result);
+                
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('errorBox').classList.add('active');
+                document.getElementById('errorText').textContent = error.message;
+                
+                // Show form again
+                if (currentMode === 'easy') {
+                    document.getElementById('easyMode').classList.add('active');
+                } else {
+                    document.getElementById('advancedMode').classList.add('active');
+                }
+            }
+        }
+        
+        // Display results
+        function displayResults(data) {
+            document.getElementById('loading').classList.remove('active');
+            
+            // Priority
+            const priority = data.triage?.priority || 'Unknown';
+            const priorityEl = document.getElementById('resPriority');
+            priorityEl.textContent = priority;
+            priorityEl.className = 'priority-badge priority-' + priority;
+            
+            // Priority explanation
+            const priorityExplain = {
+                'P1': '(Critical - Fix immediately!)',
+                'P2': '(High - Fix within hours)',
+                'P3': '(Medium - Fix within 1-2 days)',
+                'P4': '(Low - Fix when possible)'
+            };
+            document.getElementById('resPriorityExplain').textContent = priorityExplain[priority] || '';
+            
+            document.getElementById('resCategory').textContent = data.triage?.category || '-';
+            document.getElementById('resSummary').textContent = data.triage?.summary || '-';
+            document.getElementById('resReasoning').textContent = data.triage?.reasoning || '-';
+            
+            // Root Cause
+            document.getElementById('resCause').textContent = data.rca?.root_cause || '-';
+            
+            const factors = data.rca?.contributing_factors || [];
+            document.getElementById('resFactors').textContent = factors.length > 0 ? factors.join(', ') : 'None identified';
+            
+            const evidence = data.rca?.evidence || [];
+            document.getElementById('resEvidence').textContent = evidence.length > 0 ? evidence.join('; ') : 'See logs';
+            
+            document.getElementById('resConfidence').textContent = data.rca?.confidence || '-';
+            
+            // Resolution
+            const actions = data.resolution?.recommended_actions || [];
+            const actionsList = document.getElementById('resActions');
+            actionsList.innerHTML = '';
+            
+            if (actions.length > 0) {
+                actions.forEach((action, i) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="action-num">${i + 1}</span><span>${action}</span>`;
+                    actionsList.appendChild(li);
+                });
+            } else {
+                actionsList.innerHTML = '<li>No specific actions recommended</li>';
+            }
+            
+            document.getElementById('resTime').textContent = data.resolution?.estimated_time || '-';
+            
+            // Runbook
+            if (data.resolution?.runbook_reference) {
+                document.getElementById('resRunbookItem').style.display = 'block';
+                document.getElementById('resRunbook').textContent = data.resolution.runbook_reference;
+            } else {
+                document.getElementById('resRunbookItem').style.display = 'none';
+            }
+            
+            // Draft Response
+            document.getElementById('resDraft').textContent = data.resolution?.draft_response || 'No draft response generated';
+            
+            // Similar Incidents
+            const similar = data.resolution?.similar_incidents || [];
+            if (similar.length > 0) {
+                document.getElementById('resSimilarCard').style.display = 'block';
+                document.getElementById('resSimilar').innerHTML = similar.map(s => 
+                    `<div style="padding: 10px; background: #f5f5f5; border-radius: 8px; margin-bottom: 10px;">
+                        <strong>${s.id || 'Previous Incident'}</strong>: ${s.summary || JSON.stringify(s)}
+                    </div>`
+                ).join('');
+            } else {
+                document.getElementById('resSimilarCard').style.display = 'none';
+            }
+            
+            document.getElementById('results').classList.add('active');
+        }
+        
+        // Copy draft to clipboard
+        function copyDraft() {
+            const text = document.getElementById('resDraft').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Copied to clipboard!');
+            }).catch(() => {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('✅ Copied to clipboard!');
+            });
+        }
+        
+        // Hide error
+        function hideError() {
+            document.getElementById('errorBox').classList.remove('active');
+        }
+        
+        // Reset form
+        function resetForm() {
+            document.getElementById('results').classList.remove('active');
+            
+            // Clear forms
+            document.getElementById('easyTitle').value = '';
+            document.getElementById('easyDescription').value = '';
+            document.getElementById('easyLogs').value = '';
+            document.getElementById('advTitle').value = '';
+            document.getElementById('advDescription').value = '';
+            document.getElementById('advLogs').value = '';
+            
+            // Show current mode
+            if (currentMode === 'easy') {
+                document.getElementById('easyMode').classList.add('active');
+            } else {
+                document.getElementById('advancedMode').classList.add('active');
+            }
+        }
+        
+        // Initialize
+        checkHealth();
+        setInterval(checkHealth, 30000); // Check every 30 seconds
+    </script>
+</body>
+</html>

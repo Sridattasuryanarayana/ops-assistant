@@ -1,0 +1,308 @@
+================================================================================
+                    🔧 IT PROBLEM HELPER
+              Complete Guide - Easy for Everyone!
+================================================================================
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         WHAT IS THIS TOOL?                                   ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  A "Smart IT Helper" that reads your problem and gives you:                 ║
+║                                                                              ║
+║    ✅ Priority     → How serious is it? (P1=Critical, P2=High, P3=Medium)   ║
+║    ✅ Root Cause   → WHY did this happen?                                   ║
+║    ✅ Solution     → Step-by-step FIX instructions                          ║
+║    ✅ Draft Reply  → Ready-to-send message to copy                          ║
+║                                                                              ║
+║  EXAMPLE:                                                                    ║
+║    You type:  "Website is slow, 50 users complaining"                       ║
+║    You get:   Priority = P1 (Critical)                                      ║
+║               Cause = "Database overloaded"                                 ║
+║               Fix = "1. Restart database  2. Increase memory"               ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+================================================================================
+                        HOW TO START (Do This First!)
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   OPTION A: Easiest Way (Double-Click)                                      │
+│   ─────────────────────────────────────                                      │
+│                                                                              │
+│   Just double-click: START_SERVER.bat                                        │
+│   (This file is in c:\Users\srakella\ops-assistant)                         │
+│                                                                              │
+│   Wait until you see "Application startup complete"                         │
+│   Then minimize the window (don't close it!)                                │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   OPTION B: Manual Way (If Option A doesn't work)                           │
+│   ───────────────────────────────────────────────                            │
+│                                                                              │
+│   Step 1: Press Windows + R                                                 │
+│   Step 2: Type: cmd     (then press Enter)                                  │
+│   Step 3: Type: cd c:\Users\srakella\ops-assistant                          │
+│   Step 4: Type: c:/Users/srakella/ops-assistant/.venv/Scripts/python.exe -m uvicorn main:app --port 8000
+│   Step 5: Wait for "Application startup complete"                           │
+│   Step 6: Minimize window (keep it running!)                                │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+================================================================================
+                     HOW TO USE (After Server is Running)
+================================================================================
+
+   Step 1: Open your web browser (Chrome, Edge, Firefox)
+   
+   Step 2: Copy this address and paste it in browser:
+   
+   ╔════════════════════════════════════════════════════════════════════════╗
+   ║                                                                        ║
+   ║   file:///c:/Users/srakella/ops-assistant/ui_combined.html             ║
+   ║                                                                        ║
+   ║   (Or just double-click the file "ui_combined.html" in the folder)    ║
+   ║                                                                        ║
+   ╚════════════════════════════════════════════════════════════════════════╝
+   
+   Step 3: You'll see a colorful form with TWO MODES:
+   
+           😊 EASY MODE     → For everyone (step-by-step guide)
+           ⚙️ ADVANCED MODE → For IT staff (more technical options)
+   
+   Step 4: Fill out the form and click "Analyze My Problem"
+
+
+================================================================================
+                    FILLING THE FORM (It's Simple!)
+================================================================================
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║  FIELD 1: "What's the problem?"                                             ║
+║  ─────────────────────────────────                                           ║
+║  Write a SHORT title (5-10 words)                                           ║
+║                                                                              ║
+║     ✓ GOOD: "Website is very slow"                                          ║
+║     ✓ GOOD: "Cannot login to my computer"                                   ║
+║     ✓ GOOD: "Email not sending"                                             ║
+║     ✗ BAD:  "Help!"                                                         ║
+║     ✗ BAD:  "Something is wrong I don't know what"                          ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  FIELD 2: "Tell us more details"                                            ║
+║  ─────────────────────────────────                                           ║
+║  Include these details:                                                     ║
+║                                                                              ║
+║     • WHEN did it start? → "Since 2 PM today..."                            ║
+║     • HOW MANY affected? → "About 50 people..."                             ║
+║     • WHAT happens?      → "Page shows blank screen..."                     ║
+║                                                                              ║
+║  EXAMPLE:                                                                    ║
+║  "Since 2 PM today, about 50 users cannot open the company website.        ║
+║   It shows a blank page. Everything was working fine this morning."        ║
+║                                                                              ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  FIELD 3: "Any error messages?" (OPTIONAL - Skip if none!)                  ║
+║  ───────────────────────────────────────────────────────────                 ║
+║  If you see any red errors or codes, copy them here:                        ║
+║                                                                              ║
+║     • "Error 500"                                                           ║
+║     • "Connection timeout"                                                  ║
+║     • "Access denied"                                                       ║
+║                                                                              ║
+║  Don't see any error? Just leave this empty!                                ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+================================================================================
+                    WHAT YOU GET BACK (The Results)
+================================================================================
+
+After you click "Analyze My Problem", wait 10-30 seconds. You'll see:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  🚨 HOW SERIOUS IS THIS?                                                    │
+│  ───────────────────────                                                    │
+│                                                                             │
+│  Priority: P1 (Critical - Fix immediately!)                                 │
+│            P2 (High - Fix within hours)                                     │
+│            P3 (Medium - Fix within 1-2 days)                                │
+│            P4 (Low - Fix when possible)                                     │
+│                                                                             │
+│  Category: Database / Network / Security / Application                      │
+│  Summary:  Short description of what's happening                            │
+│  Why:      Reason this priority was chosen                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  🔍 WHY DID THIS HAPPEN?                                                    │
+│  ─────────────────────────                                                  │
+│                                                                             │
+│  Main Cause:     "Database is overloaded with too many requests"            │
+│  Other Factors:  Things that made the problem worse                         │
+│  Evidence:       Proof from logs/error messages                             │
+│  AI Confidence:  High / Medium / Low (how sure the AI is)                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ✅ HOW TO FIX IT                                                           │
+│  ──────────────────                                                         │
+│                                                                             │
+│  Step 1: Check database server status                                       │
+│  Step 2: Restart the database service                                       │
+│  Step 3: Monitor for 15 minutes                                             │
+│                                                                             │
+│  Estimated Time: 15-30 minutes                                              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  💬 READY-TO-SEND RESPONSE                                                  │
+│  ────────────────────────────                                               │
+│                                                                             │
+│  A pre-written message you can COPY and send to the person who reported    │
+│  the problem. Just click "Copy to Clipboard"!                               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                    WHERE ARE RESULTS SAVED?
+================================================================================
+
+1. ON YOUR SCREEN
+   Results appear instantly in your browser. No file is created.
+   You can COPY the results using the "Copy to Clipboard" button.
+
+2. KNOWLEDGE DATABASE (Automatic)
+   Location: c:\Users\srakella\ops-assistant\chroma_db\
+   The AI remembers past problems and uses them to help with future ones.
+
+3. WANT TO SAVE TO A FILE?
+   Click "Copy to Clipboard" and paste into Word, Notepad, or Email.
+
+
+================================================================================
+                    QUICK EXAMPLES (Try These!)
+================================================================================
+
+Example 1: Slow Website
+───────────────────────
+  Title:       Website is very slow
+  Description: Since 2 PM today, many users say the company website 
+               takes 30 seconds to load. About 50 people complained.
+  Errors:      (leave empty)
+
+Example 2: Login Problem
+─────────────────────────
+  Title:       Cannot login to computer
+  Description: When I type my password, it says "Invalid credentials". 
+               I haven't changed my password. Started this morning.
+               Other people in my department have the same problem.
+  Errors:      Error: Invalid credentials
+
+Example 3: Email Issue
+───────────────────────
+  Title:       Email not sending
+  Description: When I try to send emails, they stay in my outbox and 
+               never send. I can receive emails but not send them. 
+               At least 10 people have this problem.
+  Errors:      SMTP connection timeout
+
+
+================================================================================
+                    FOR IT STAFF (Advanced Features)
+================================================================================
+
+Switch to "Advanced Mode" in the form for:
+
+  • Custom Ticket IDs
+  • Detailed log input
+  • Technical examples (DB Timeout, Memory Leak, High CPU, Kafka Lag)
+  • Full API access
+
+API ENDPOINTS (for developers):
+────────────────────────────────
+  GET  /health              → Check if server is running
+  POST /api/analyze         → Full analysis (triage + RCA + fix)
+  POST /api/triage          → Just priority and category
+  POST /api/rca             → Just root cause analysis
+  POST /api/resolution      → Just fix suggestions
+  POST /api/chat            → Ask any question
+  GET  /api/knowledge/stats → See how many documents stored
+  POST /api/ingest          → Add new knowledge documents
+
+API Documentation: http://localhost:8000/docs
+
+
+================================================================================
+                    TROUBLESHOOTING (If Something Goes Wrong)
+================================================================================
+
+PROBLEM: "Server not connected" (red dot)
+─────────────────────────────────────────
+  The server is not running. Go back to "HOW TO START" and run it.
+
+PROBLEM: First time is slow (30+ seconds)
+──────────────────────────────────────────
+  Normal! First run downloads AI model (~90MB). It's faster after that.
+
+PROBLEM: "ModuleNotFoundError" error
+────────────────────────────────────
+  Missing packages. Open cmd and run:
+  pip install sentence-transformers chromadb fastapi uvicorn httpx python-dotenv
+
+PROBLEM: "Address already in use" error
+────────────────────────────────────────
+  Another program is using port 8000. Try:
+  python -m uvicorn main:app --port 8001
+  (Then change API_URL in the HTML file to use 8001)
+
+PROBLEM: Results are not accurate
+──────────────────────────────────
+  Give more details in your description. Include:
+  • When it started
+  • How many people affected
+  • What error messages you see
+
+
+================================================================================
+                    FILES IN THIS FOLDER
+================================================================================
+
+  ui_combined.html      → The main form (Easy + Advanced mode)
+  HOW_TO_RUN_GUIDE.txt  → This guide
+  START_SERVER.bat      → Double-click to start server
+  main.py               → The server program
+  chroma_db/            → Where AI knowledge is stored
+
+
+================================================================================
+                          NEED MORE HELP?
+================================================================================
+
+  1. Check server status: Look at the colored dots in the form
+     • Green = Working
+     • Red = Not working
+     • Yellow = Partial
+
+  2. API Documentation: http://localhost:8000/docs
+
+  3. Contact: [Your IT support contact here]
+
+
+================================================================================
+                         Happy Problem Solving! 🎉
+================================================================================

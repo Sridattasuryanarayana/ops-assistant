@@ -1,0 +1,21 @@
+# GenAI Operations Assistant - Dependencies
+
+# Web Framework
+fastapi>=0.109.0
+uvicorn>=0.27.0
+
+# Data Validation
+pydantic>=2.5.0
+
+# HTTP Client (for LLM API)
+httpx>=0.26.0
+
+# Environment
+python-dotenv>=1.0.0
+
+# Optional: Rich CLI output
+rich>=13.7.0
+
+# RAG / Embeddings
+sentence-transformers>=2.2.0
+chromadb>=0.4.0

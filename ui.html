@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI Operations Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #00d4ff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        button:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            margin-top: 30px;
+        }
+        
+        .result-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .result-section h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .result-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .result-label {
+            color: #888;
+            min-width: 140px;
+        }
+        
+        .result-value {
+            color: #fff;
+            flex: 1;
+        }
+        
+        .priority-p1 { color: #ff4444; font-weight: bold; }
+        .priority-p2 { color: #ffaa00; font-weight: bold; }
+        .priority-p3 { color: #00d4ff; }
+        .priority-p4 { color: #888; }
+        
+        .action-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .action-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .action-number {
+            background: #00d4ff;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #333;
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid #ff4444;
+            color: #ff6666;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .draft-response {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #00d4ff;
+            white-space: pre-wrap;
+        }
+        
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.green { background: #00ff88; }
+        .status-dot.red { background: #ff4444; }
+        .status-dot.yellow { background: #ffaa00; }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 GenAI Operations Assistant</h1>
+            <p class="subtitle">AI-Powered Ticket Triage, RCA & Resolution</p>
+        </header>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot" id="llmStatus"></span>
+                <span>LLM Endpoint</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="dbStatus"></span>
+                <span>Knowledge Base: <span id="docCount">-</span> docs</span>
+            </div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="card">
+                <h2>📝 Submit Ticket for Analysis</h2>
+                
+                <form id="ticketForm">
+                    <div class="form-group">
+                        <label for="ticketId">Ticket ID</label>
+                        <input type="text" id="ticketId" placeholder="INC001234" value="INC001234">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketTitle">Title</label>
+                        <input type="text" id="ticketTitle" placeholder="Brief description of the issue">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketDescription">Description</label>
+                        <textarea id="ticketDescription" placeholder="Detailed description of the incident, symptoms, and any relevant information..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketLogs">Logs (optional)</label>
+                        <textarea id="ticketLogs" placeholder="Paste relevant log snippets here..." style="min-height: 100px;"></textarea>
+                    </div>
+                    
+                    <button type="submit" id="analyzeBtn">🔍 Analyze Ticket</button>
+                </form>
+                
+                <div style="margin-top: 20px;">
+                    <label>Quick Examples:</label>
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <button type="button" onclick="loadExample('db')" style="width: auto; padding: 8px 16px; font-size: 0.85rem;">DB Timeout</button>
+                        <button type="button" onclick="loadExample('memory')" style="width: auto; padding: 8px 16px; font-size: 0.85rem;">Memory Leak</button>
+                        <button type="button" onclick="loadExample('cpu')" style="width: auto; padding: 8px 16px; font-size: 0.85rem;">High CPU</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📊 Analysis Results</h2>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing ticket with AI...</p>
+                </div>
+                
+                <div id="results" class="results" style="display: none;">
+                    <!-- Triage Section -->
+                    <div class="result-section">
+                        <h3>🏷️ Triage</h3>
+                        <div class="result-row">
+                            <span class="result-label">Priority:</span>
+                            <span class="result-value" id="resPriority">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Category:</span>
+                            <span class="result-value" id="resCategory">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Summary:</span>
+                            <span class="result-value" id="resSummary">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- RCA Section -->
+                    <div class="result-section">
+                        <h3>🔍 Root Cause Analysis</h3>
+                        <div class="result-row">
+                            <span class="result-label">Root Cause:</span>
+                            <span class="result-value" id="resRootCause">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Confidence:</span>
+                            <span class="result-value" id="resConfidence">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Factors:</span>
+                            <span class="result-value" id="resFactors">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Resolution Section -->
+                    <div class="result-section">
+                        <h3>✅ Recommended Actions</h3>
+                        <ul class="action-list" id="resActions"></ul>
+                        <div class="result-row" style="margin-top: 15px;">
+                            <span class="result-label">Est. Time:</span>
+                            <span class="result-value" id="resTime">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Draft Response -->
+                    <div class="result-section">
+                        <h3>💬 Draft Response</h3>
+                        <div class="draft-response" id="resDraft">-</div>
+                    </div>
+                </div>
+                
+                <div id="error" class="error" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        
+        // Example tickets
+        const examples = {
+            db: {
+                title: "Database connection timeout in production",
+                description: "Users reporting slow response times and timeout errors. Application logs show 'Connection pool exhausted' errors. Started after traffic spike at 14:00 UTC. Approximately 40% of requests are failing."
+            },
+            memory: {
+                title: "Memory leak in payment service",
+                description: "Payment service pods restarting every 4 hours due to OOMKilled. Memory usage grows linearly over time from 2GB to 8GB limit. No recent deployments. Heap dumps show growing collection of HTTP response objects."
+            },
+            cpu: {
+                title: "High CPU usage on web servers",
+                description: "All web server instances showing 95%+ CPU utilization. Response times degraded from 200ms to 5+ seconds. No recent deployments. Started around 10 AM when a new marketing campaign launched."
+            }
+        };
+        
+        function loadExample(type) {
+            const example = examples[type];
+            document.getElementById('ticketTitle').value = example.title;
+            document.getElementById('ticketDescription').value = example.description;
+        }
+        
+        // Check health on load
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                document.getElementById('llmStatus').className = 
+                    'status-dot ' + (data.llm_available ? 'green' : 'red');
+                document.getElementById('dbStatus').className = 
+                    'status-dot ' + (data.documents_indexed > 0 ? 'green' : 'yellow');
+                document.getElementById('docCount').textContent = data.documents_indexed;
+            } catch (e) {
+                document.getElementById('llmStatus').className = 'status-dot red';
+                document.getElementById('dbStatus').className = 'status-dot red';
+            }
+        }
+        
+        // Form submission
+        document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const ticketId = document.getElementById('ticketId').value;
+            const title = document.getElementById('ticketTitle').value;
+            const description = document.getElementById('ticketDescription').value;
+            const logs = document.getElementById('ticketLogs').value;
+            
+            if (!title || !description) {
+                alert('Please enter a title and description');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('analyzeBtn').disabled = true;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticket_id: ticketId,
+                        title: title,
+                        description: description,
+                        logs: logs || null
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                displayResults(data);
+                
+            } catch (err) {
+                document.getElementById('error').textContent = 
+                    'Error: ' + err.message + '. Make sure the API server is running.';
+                document.getElementById('error').style.display = 'block';
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('analyzeBtn').disabled = false;
+            }
+        });
+        
+        function displayResults(data) {
+            // Triage
+            const priority = data.triage.priority;
+            document.getElementById('resPriority').innerHTML = 
+                `<span class="priority-${priority.toLowerCase()}">${priority}</span>`;
+            document.getElementById('resCategory').textContent = data.triage.category;
+            document.getElementById('resSummary').textContent = data.triage.summary;
+            
+            // RCA
+            document.getElementById('resRootCause').textContent = data.rca.root_cause;
+            document.getElementById('resConfidence').textContent = data.rca.confidence;
+            document.getElementById('resFactors').textContent = 
+                data.rca.contributing_factors.join(', ') || '-';
+            
+            // Actions
+            const actionsList = document.getElementById('resActions');
+            actionsList.innerHTML = '';
+            data.resolution.recommended_actions.forEach((action, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="action-number">${i + 1}</span><span>${action}</span>`;
+                actionsList.appendChild(li);
+            });
+            
+            document.getElementById('resTime').textContent = data.resolution.estimated_time;
+            document.getElementById('resDraft').textContent = 
+                data.resolution.draft_response || 'No draft response generated';
+            
+            document.getElementById('results').style.display = 'block';
+        }
+        
+        // Initial health check
+        checkHealth();
+        setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>
