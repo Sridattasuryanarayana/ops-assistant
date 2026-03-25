@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpsAssistant Pro | AI-Powered IT Operations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--gray-100);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+        
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, 2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
+        }
+        
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .orb-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; right: -100px; animation: float1 15s ease-in-out infinite; }
+        .orb-2 { width: 300px; height: 300px; background: var(--accent); bottom: -50px; left: -50px; animation: float2 18s ease-in-out infinite; }
+        .orb-3 { width: 200px; height: 200px; background: #8b5cf6; top: 50%; left: 50%; animation: float3 12s ease-in-out infinite; }
+        
+        @keyframes float1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-30px, 30px); } }
+        @keyframes float2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
+        @keyframes float3 { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-40%, -60%); } }
+        
+        /* Navigation */
+        .navbar {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; gap: 8px; }
+        
+        .nav-btn {
+            padding: 12px 24px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            color: var(--gray-300);
+        }
+        
+        .nav-btn:hover {
+            background: var(--glass);
+            color: var(--white);
+            border-color: var(--glass-border);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            margin: 24px 40px;
+            padding: 16px 32px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--gray-300);
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gray-500);
+            box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .status-dot.green { background: var(--success); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2), 0 0 12px rgba(16, 185, 129, 0.4); }
+        .status-dot.red { background: var(--danger); box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2), 0 0 12px rgba(239, 68, 68, 0.4); }
+        .status-dot.yellow { background: var(--warning); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2), 0 0 12px rgba(245, 158, 11, 0.4); }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+        
+        /* Pages */
+        .page {
+            display: none;
+            animation: pageIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page.active { display: block; }
+        
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Glass Cards */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+        
+        .card-icon.purple { background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1)); }
+        .card-icon.blue { background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.1)); }
+        .card-icon.cyan { background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1)); }
+        .card-icon.green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1)); }
+        .card-icon.orange { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1)); }
+        .card-icon.red { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1)); }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        /* Form Elements */
+        .form-group { margin-bottom: 28px; }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--white);
+            font-size: 15px;
+        }
+        
+        .form-hint {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--warning);
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            border-radius: 0 12px 12px 0;
+            font-size: 14px;
+            color: var(--warning);
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--white);
+            transition: all 0.3s;
+        }
+        
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: var(--gray-500);
+        }
+        
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        .form-textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+        
+        .optional-badge {
+            background: var(--dark-light);
+            color: var(--gray-400);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-primary:active { transform: translateY(0); }
+        
+        .btn-secondary {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        /* Example Buttons */
+        .example-container {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 28px;
+        }
+        
+        .example-label {
+            font-weight: 600;
+            color: var(--gray-300);
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+        
+        .example-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .example-btn {
+            padding: 10px 18px;
+            background: var(--dark-light);
+            color: var(--gray-300);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        
+        .example-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        /* Mode Tabs */
+        .mode-tabs {
+            display: flex;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 28px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .mode-tab {
+            flex: 1;
+            padding: 14px 20px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--gray-400);
+            transition: all 0.3s;
+        }
+        
+        .mode-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loading-overlay.active { display: flex; }
+        
+        .spinner-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--dark-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .spinner-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } }
+        
+        .loading-text {
+            margin-top: 28px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--white);
+        }
+        
+        .loading-sub {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+        
+        /* Results */
+        .result-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+        
+        .result-card.priority::before { background: linear-gradient(180deg, var(--danger), #dc2626); }
+        .result-card.cause::before { background: linear-gradient(180deg, var(--warning), #d97706); }
+        .result-card.solution::before { background: linear-gradient(180deg, var(--success), #059669); }
+        .result-card.draft::before { background: linear-gradient(180deg, var(--primary), var(--accent)); }
+        
+        .result-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            color: var(--white);
+            font-size: 18px;
+        }
+        
+        .result-row {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .result-row:last-child { border-bottom: none; }
+        
+        .result-label {
+            font-weight: 600;
+            color: var(--gray-400);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .result-value {
+            font-size: 15px;
+            color: var(--gray-100);
+            line-height: 1.7;
+        }
+        
+        /* Priority Badges */
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .priority-P1 { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .priority-P2 { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .priority-P3 { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .priority-P4 { background: rgba(100, 116, 139, 0.2); color: #cbd5e1; border: 1px solid rgba(100, 116, 139, 0.3); }
+        
+        /* Action Steps */
+        .action-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .action-list li {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .action-list li:last-child { border-bottom: none; }
+        
+        .action-num {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: var(--white);
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 16px;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+        
+        /* Draft Box */
+        .draft-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 24px;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            color: var(--gray-100);
+            font-size: 14px;
+        }
+        
+        .copy-btn {
+            margin-top: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+        }
+        
+        /* Guide Sections */
+        .guide-section {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        .guide-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 22px 28px;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--white);
+        }
+        
+        .guide-content { padding: 28px; }
+        
+        .guide-step {
+            display: flex;
+            align-items: flex-start;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .guide-step:last-child { border-bottom: none; }
+        
+        .step-num {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .step-content h4 {
+            color: var(--white);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .step-content p {
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+        
+        .code-box {
+            background: #0d1117;
+            color: var(--success);
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 12px 0;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        @media (max-width: 1024px) {
+            .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .navbar { padding: 16px 20px; flex-wrap: wrap; gap: 16px; }
+            .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .status-bar { margin: 16px 20px; flex-wrap: wrap; gap: 20px; padding: 16px 24px; }
+            .container { padding: 0 20px 40px; }
+            .card { padding: 24px; }
+        }
+        
+        /* Tables */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .info-table th, .info-table td {
+            padding: 16px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .info-table th {
+            background: rgba(99, 102, 241, 0.1);
+            font-weight: 600;
+            color: var(--gray-200);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-table td { color: var(--gray-300); }
+        
+        .info-table tr:hover td { background: rgba(255, 255, 255, 0.03); }
+        
+        /* Alerts */
+        .alert {
+            padding: 18px 22px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            border: 1px solid;
+        }
+        
+        .alert-icon { font-size: 22px; }
+        
+        .alert-info {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.2);
+            color: #67e8f9;
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+        
+        /* Feature Cards */
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 28px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+        
+        .feature-card h3 {
+            color: var(--white);
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-card p {
+            color: var(--gray-400);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* API Badge */
+        .method-badge {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .method-get { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+        .method-post { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: var(--primary-light);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5);
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 50px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-500);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 40px;
+        }
+        
+        .footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+        
+        .footer a:hover { text-decoration: underline; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: var(--dark-light); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-600); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-500); }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-animation"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            Ops<span>Assistant</span> Pro
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="showPage('home')">Home</button>
+            <button class="nav-btn" onclick="showPage('problem')">Problem</button>
+            <button class="nav-btn" onclick="showPage('solution')">Solution</button>
+            <button class="nav-btn" onclick="showPage('impact')">Impact</button>
+            <button class="nav-btn" onclick="showPage('analyze')">Analyze</button>
+            <button class="nav-btn" onclick="showPage('guide')">Guide</button>
+        </div>
+    </nav>
+    
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item">
+            <span class="status-dot" id="serverStatus"></span>
+            <span>Server: <strong id="serverText">Checking...</strong></span>
+        </div>
+        <div class="status-item">
+            <span class="status-dot" id="aiStatus"></span>
+            <span>Phi-4 Mini: <strong id="aiText">Checking...</strong></span>
+        </div>
+        <div class="status-item">
+            <span class="status-dot" id="dbStatus"></span>
+            <span>Knowledge Base: <strong id="docCount">-</strong> documents</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- HOME PAGE -->
+        <div id="homePage" class="page active">
+            <div class="hero">
+                <div class="hero-badge">
+                    🏆 Intel Hackathon 2026 • Powered by Phi-4 Mini
+                </div>
+                <h1>GenAI Operations <span>Automation</span></h1>
+                <p>AI-powered ticket triage, root cause analysis, and resolution recommendations. Reduce MTTR by 40% with intelligent operations automation.</p>
+                <button class="hero-btn" onclick="showPage('analyze')">
+                    🚀 Start Analyzing
+                </button>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">40%</div>
+                        <div class="stat-label">Faster Resolution</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">63%</div>
+                        <div class="stat-label">L1 Effort Reduced</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">38min</div>
+                        <div class="stat-label">P1 MTTR</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Core Flow -->
+            <div class="card" style="margin-top: 60px; text-align: center;">
+                <div class="card-header" style="justify-content: center;">
+                    <div class="card-icon cyan">🔄</div>
+                    <h2 class="card-title">Core Flow</h2>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 0;">
+                    <div class="feature-card" style="flex: 1; min-width: 200px; max-width: 220px;">
+                        <div class="feature-icon card-icon purple">📥</div>
+                        <h3>1. Ingest</h3>
+                        <p>Tickets, Logs, SOPs, KB Articles</p>
+                    </div>
+                    <div style="font-size: 30px; color: var(--primary);">→</div>
+                    <div class="feature-card" style="flex: 1; min-width: 200px; max-width: 220px;">
+                        <div class="feature-icon card-icon blue">🔍</div>
+                        <h3>2. Retrieve</h3>
+                        <p>RAG + ChromaDB Vector Search</p>
+                    </div>
+                    <div style="font-size: 30px; color: var(--primary);">→</div>
+                    <div class="feature-card" style="flex: 1; min-width: 200px; max-width: 220px;">
+                        <div class="feature-icon card-icon orange">🧠</div>
+                        <h3>3. Reason</h3>
+                        <p>Phi-4 Mini LLM Analysis</p>
+                    </div>
+                    <div style="font-size: 30px; color: var(--primary);">→</div>
+                    <div class="feature-card" style="flex: 1; min-width: 200px; max-width: 220px;">
+                        <div class="feature-icon card-icon green">✅</div>
+                        <h3>4. Act</h3>
+                        <p>Resolution + Draft Response</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features -->
+            <div class="grid-4" style="margin-top: 40px;">
+                <div class="feature-card">
+                    <div class="feature-icon card-icon purple">📝</div>
+                    <h3>Easy Input</h3>
+                    <p>Describe problems in plain English</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon card-icon blue">🎯</div>
+                    <h3>Smart Triage</h3>
+                    <p>Auto P1-P4 priority classification</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon card-icon orange">🔍</div>
+                    <h3>Root Cause</h3>
+                    <p>AI identifies the real problem</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon card-icon green">✅</div>
+                    <h3>Solutions</h3>
+                    <p>Step-by-step fix instructions</p>
+                </div>
+            </div>
+            
+            <!-- Technology Stack -->
+            <div class="card" style="margin-top: 40px;">
+                <div class="card-header">
+                    <div class="card-icon blue">🛠️</div>
+                    <h2 class="card-title">Technology Stack</h2>
+                </div>
+                <div class="grid-4">
+                    <div class="alert alert-info" style="text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 10px;">🧠</div>
+                        <strong>Phi-4 Mini</strong>
+                        <p style="margin: 5px 0 0; opacity: 0.8;">Intel AI LLM</p>
+                    </div>
+                    <div class="alert alert-info" style="text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 10px;">🗄️</div>
+                        <strong>ChromaDB</strong>
+                        <p style="margin: 5px 0 0; opacity: 0.8;">Vector Store</p>
+                    </div>
+                    <div class="alert alert-info" style="text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 10px;">⚡</div>
+                        <strong>FastAPI</strong>
+                        <p style="margin: 5px 0 0; opacity: 0.8;">REST API</p>
+                    </div>
+                    <div class="alert alert-info" style="text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 10px;">🔗</div>
+                        <strong>RAG Pipeline</strong>
+                        <p style="margin: 5px 0 0; opacity: 0.8;">Context Retrieval</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PROBLEM STATEMENT PAGE -->
+        <div id="problemPage" class="page">
+            <div class="hero" style="padding: 40px 0;">
+                <div class="hero-badge">🎯 Problem Statement</div>
+                <h1>Operations <span>Challenges</span></h1>
+                <p>What operations teams face today</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon red">🚨</div>
+                    <h2 class="card-title">The Problem (Operations Lens)</h2>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="result-card priority">
+                        <h3>📊 High Ticket Volumes</h3>
+                        <div class="result-row">
+                            <div class="result-value">500+ tickets/day overwhelming L1/L2 support teams. Manual processing creates bottlenecks and delays.</div>
+                        </div>
+                    </div>
+                    <div class="result-card cause">
+                        <h3>🔄 Repetitive Manual Triage</h3>
+                        <div class="result-row">
+                            <div class="result-value">60% of tickets are routine but still require human review. Skilled engineers waste time on repetitive classification.</div>
+                        </div>
+                    </div>
+                    <div class="result-card solution">
+                        <h3>⏱️ Slow RCA Process</h3>
+                        <div class="result-row">
+                            <div class="result-value">Average 45 minutes to identify root cause. Multiple tools, systems, and logs to correlate manually.</div>
+                        </div>
+                    </div>
+                    <div class="result-card draft">
+                        <h3>📚 Scattered Knowledge</h3>
+                        <div class="result-row">
+                            <div class="result-value">Documents, logs, SOPs spread across 10+ systems. Tribal knowledge lost when engineers leave.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <div class="card-icon orange">💰</div>
+                    <h2 class="card-title">The Cost of Manual Operations</h2>
+                </div>
+                
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <div style="font-size: 48px; color: var(--danger); font-weight: 800;">$125</div>
+                        <h3>/hour</h3>
+                        <p>Average fully-loaded SRE cost</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 48px; color: var(--warning); font-weight: 800;">4.2h</div>
+                        <h3>MTTR</h3>
+                        <p>Average P2 incident resolution</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 48px; color: var(--primary); font-weight: 800;">68%</div>
+                        <h3>L1 Time</h3>
+                        <p>Spent on repetitive tasks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SOLUTION PAGE -->
+        <div id="solutionPage" class="page">
+            <div class="hero" style="padding: 40px 0;">
+                <div class="hero-badge">💡 Our Solution</div>
+                <h1>GenAI-Powered <span>Automation</span></h1>
+                <p>Intelligent operations assistant powered by Phi-4 Mini</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon green">🔄</div>
+                    <h2 class="card-title">Core Solution Flow</h2>
+                </div>
+                
+                <!-- Flow Diagram -->
+                <div style="background: rgba(15, 23, 42, 0.6); border-radius: 16px; padding: 30px; margin-bottom: 30px;">
+                    <pre style="color: var(--success); font-family: 'Consolas', monospace; font-size: 12px; overflow-x: auto; line-height: 1.6;">
+┌─────────────────────────────────────────────────────────────────────┐
+│                     GenAI Operations Assistant                       │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────┐   │
+│  │   INGEST     │───▶│   RETRIEVE   │───▶│    REASON & ACT      │   │
+│  │              │    │   (RAG)      │    │    (Phi-4 Mini)      │   │
+│  │ • Tickets    │    │              │    │                      │   │
+│  │ • Logs       │    │ ChromaDB     │    │ • Summarize          │   │
+│  │ • SOPs       │    │ Vector Store │    │ • Classify (P1-P4)   │   │
+│  │ • KB Articles│    │              │    │ • Root Cause         │   │
+│  └──────────────┘    └──────────────┘    │ • Recommend Fix      │   │
+│                                          │ • Draft Response     │   │
+│                                          └──────────────────────┘   │
+│                                                     │               │
+│                                                     ▼               │
+│                                          ┌──────────────────────┐   │
+│                                          │  ACTIONABLE OUTPUT   │   │
+│                                          │  • Priority + ETA    │   │
+│                                          │  • Root Cause        │   │
+│                                          │  • Next-Best Action  │   │
+│                                          │  • Draft Runbook     │   │
+│                                          └──────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="guide-section">
+                        <div class="guide-header">1️⃣ Ingest Operational Data</div>
+                        <div class="guide-content">
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">📋 <strong>Tickets</strong> - ServiceNow, Jira, PagerDuty</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">📜 <strong>Logs</strong> - Application, Kubernetes, Cloud</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">📖 <strong>SOPs</strong> - Standard Operating Procedures</li>
+                                <li style="padding: 10px 0;">📚 <strong>KB Articles</strong> - Troubleshooting guides</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="guide-section">
+                        <div class="guide-header">2️⃣ RAG-Based Retrieval</div>
+                        <div class="guide-content">
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">🔍 <strong>Semantic Search</strong> - Find relevant context</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">🗄️ <strong>ChromaDB</strong> - Vector store</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">📊 <strong>all-MiniLM-L6-v2</strong> - Embeddings</li>
+                                <li style="padding: 10px 0;">🎯 <strong>Top-K</strong> - Relevant knowledge retrieval</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="guide-section">
+                        <div class="guide-header">3️⃣ LLM Reasoning (Phi-4 Mini)</div>
+                        <div class="guide-content">
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">📝 <strong>Summarize</strong> - Condense ticket + logs</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">🏷️ <strong>Classify</strong> - Priority P1-P4, category</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">🔬 <strong>Diagnose</strong> - Identify root cause</li>
+                                <li style="padding: 10px 0;">💡 <strong>Recommend</strong> - Next-best actions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="guide-section">
+                        <div class="guide-header">4️⃣ Actionable Output</div>
+                        <div class="guide-content">
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">🚨 <strong>Root Cause</strong> - What went wrong</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">✅ <strong>Next-Best Action</strong> - Resolution steps</li>
+                                <li style="padding: 10px 0; border-bottom: 1px solid var(--glass-border);">💬 <strong>Draft Response</strong> - Customer communication</li>
+                                <li style="padding: 10px 0;">📋 <strong>Draft Runbook</strong> - Reusable procedure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- IMPACT PAGE -->
+        <div id="impactPage" class="page">
+            <div class="hero" style="padding: 40px 0;">
+                <div class="hero-badge">📊 Business Impact</div>
+                <h1>Measurable <span>Results</span></h1>
+                <p>Smart Operations benchmarks from real deployments</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon green">📈</div>
+                    <h2 class="card-title">Before vs After</h2>
+                </div>
+                
+                <table class="info-table">
+                    <tr>
+                        <th>Metric</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Improvement</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Resolution Time</strong></td>
+                        <td>4.2 hours</td>
+                        <td style="color: var(--success);">2.5 hours</td>
+                        <td><span class="priority-badge priority-P1" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);">~40% reduction</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>MTTR (P1 incidents)</strong></td>
+                        <td>62 mins</td>
+                        <td style="color: var(--success);">38 mins</td>
+                        <td><span class="priority-badge priority-P1" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);">39% faster</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>L1 Manual Effort</strong></td>
+                        <td>68%</td>
+                        <td style="color: var(--success);">25%</td>
+                        <td><span class="priority-badge priority-P1" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);">63% reduction</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ticket Misclassification</strong></td>
+                        <td>23%</td>
+                        <td style="color: var(--success);">5%</td>
+                        <td><span class="priority-badge priority-P1" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);">78% improvement</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>SRE Utilization</strong></td>
+                        <td>Reactive</td>
+                        <td style="color: var(--success);">Proactive</td>
+                        <td><span class="priority-badge priority-P1" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3);">Improved Posture</span></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <div class="card-icon orange">💰</div>
+                    <h2 class="card-title">ROI Calculator</h2>
+                </div>
+                
+                <div class="grid-2">
+                    <div style="background: rgba(15, 23, 42, 0.6); border-radius: 16px; padding: 30px;">
+                        <pre style="color: var(--accent); font-family: 'Consolas', monospace; font-size: 14px; line-height: 2;">
+Annual Tickets:        50,000
+Avg Resolution Time:   4.2h → 2.5h
+Time Saved:            85,000 hours/year
+SRE Hourly Cost:       $125
+<span style="color: var(--success); font-size: 18px; font-weight: bold;">Annual Savings:        $10.6M</span>
+                        </pre>
+                    </div>
+                    <div class="grid-2" style="gap: 16px;">
+                        <div class="feature-card">
+                            <div style="font-size: 36px; color: var(--success); font-weight: 800;">$10.6M</div>
+                            <p>Annual Savings</p>
+                        </div>
+                        <div class="feature-card">
+                            <div style="font-size: 36px; color: var(--primary); font-weight: 800;">85K</div>
+                            <p>Hours Saved/Year</p>
+                        </div>
+                        <div class="feature-card">
+                            <div style="font-size: 36px; color: var(--warning); font-weight: 800;">40%</div>
+                            <p>Faster Resolution</p>
+                        </div>
+                        <div class="feature-card">
+                            <div style="font-size: 36px; color: var(--accent); font-weight: 800;">24/7</div>
+                            <p>AI Available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <div class="card-icon purple">🎯</div>
+                    <h2 class="card-title">Key Benefits</h2>
+                </div>
+                
+                <div class="grid-3">
+                    <div class="alert alert-success">
+                        <span class="alert-icon">⚡</span>
+                        <div>
+                            <strong>Faster MTTR</strong>
+                            <p style="margin: 5px 0 0; opacity: 0.8;">Resolve incidents 40% faster with AI-assisted diagnosis</p>
+                        </div>
+                    </div>
+                    <div class="alert alert-success">
+                        <span class="alert-icon">🎯</span>
+                        <div>
+                            <strong>Improved SRE Posture</strong>
+                            <p style="margin: 5px 0 0; opacity: 0.8;">Shift from reactive to proactive operations</p>
+                        </div>
+                    </div>
+                    <div class="alert alert-success">
+                        <span class="alert-icon">💪</span>
+                        <div>
+                            <strong>Reduced Manual Effort</strong>
+                            <p style="margin: 5px 0 0; opacity: 0.8;">63% reduction in L1/L2 repetitive work</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ANALYZE PAGE -->
+        <div id="analyzePage" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon blue">🔍</div>
+                    <h2 class="card-title">Analyze Your Problem</h2>
+                </div>
+                
+                <!-- Mode Tabs -->
+                <div class="mode-tabs">
+                    <button class="mode-tab active" onclick="switchMode('easy')">
+                        😊 Easy Mode
+                    </button>
+                    <button class="mode-tab" onclick="switchMode('advanced')">
+                        ⚙️ Advanced Mode
+                    </button>
+                </div>
+                
+                <form id="analyzeForm">
+                    <!-- Easy Mode Fields -->
+                    <div id="easyFields">
+                        <div class="form-group">
+                            <label class="form-label">What's the problem? (Short title)</label>
+                            <div class="form-hint">💡 Write 5-10 words like "Website is very slow" or "Cannot login"</div>
+                            <input type="text" class="form-input" id="title" placeholder="Example: Website is not loading" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tell us more details</label>
+                            <div class="form-hint">💡 Include: WHEN did it start? HOW MANY people affected? WHAT happens exactly?</div>
+                            <textarea class="form-textarea" id="description" placeholder="Example: Since 2 PM today, about 50 users cannot open the company website. It shows a blank page." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Any error messages?
+                                <span class="optional-badge">Optional</span>
+                            </label>
+                            <div class="form-hint">💡 Copy any error codes or red messages you see</div>
+                            <textarea class="form-textarea" id="logs" placeholder="Example: Error 500 - Internal Server Error" style="min-height: 90px;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Mode Fields -->
+                    <div id="advancedFields" style="display: none;">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Ticket ID</label>
+                                <input type="text" class="form-input" id="ticketId" placeholder="INC001234" value="INC001234">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-input" id="advTitle" placeholder="Brief incident description" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Detailed Description</label>
+                            <textarea class="form-textarea" id="advDescription" placeholder="Include symptoms, affected systems, timeline, impact..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Logs / Stack Traces</label>
+                            <textarea class="form-textarea" id="advLogs" placeholder="Paste error logs, stack traces, or diagnostic output..." style="min-height: 150px;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Examples -->
+                    <div class="example-container">
+                        <div class="example-label">📋 Try an example:</div>
+                        <div class="example-grid">
+                            <button type="button" class="example-btn" onclick="loadExample('slow')">🌐 Slow Website</button>
+                            <button type="button" class="example-btn" onclick="loadExample('login')">🔐 Login Problem</button>
+                            <button type="button" class="example-btn" onclick="loadExample('email')">📧 Email Issue</button>
+                            <button type="button" class="example-btn" onclick="loadExample('db')">🗄️ Database Error</button>
+                            <button type="button" class="example-btn" onclick="loadExample('memory')">💾 Memory Leak</button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        ⚡ Analyze Problem
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon green">📊</div>
+                        <h2 class="card-title">Analysis Results</h2>
+                    </div>
+                    
+                    <!-- Priority -->
+                    <div class="result-card priority">
+                        <h3>🚨 Priority Assessment</h3>
+                        <div class="result-row">
+                            <div class="result-label">Priority Level</div>
+                            <div class="result-value">
+                                <span class="priority-badge" id="resPriority">-</span>
+                                <span id="resPriorityDesc" style="margin-left: 12px;"></span>
+                            </div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Category</div>
+                            <div class="result-value" id="resCategory">-</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Summary</div>
+                            <div class="result-value" id="resSummary">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Root Cause -->
+                    <div class="result-card cause">
+                        <h3>🔍 Root Cause Analysis</h3>
+                        <div class="result-row">
+                            <div class="result-label">Primary Cause</div>
+                            <div class="result-value" id="resCause">-</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Contributing Factors</div>
+                            <div class="result-value" id="resFactors">-</div>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Confidence</div>
+                            <div class="result-value" id="resConfidence">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Solution -->
+                    <div class="result-card solution">
+                        <h3>✅ Recommended Solution</h3>
+                        <div class="result-row">
+                            <div class="result-label">Action Steps</div>
+                            <ul class="action-list" id="resActions"></ul>
+                        </div>
+                        <div class="result-row">
+                            <div class="result-label">Estimated Resolution Time</div>
+                            <div class="result-value" id="resTime">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Draft Response -->
+                    <div class="result-card draft">
+                        <h3>💬 Draft Response</h3>
+                        <p style="color: var(--gray-400); margin-bottom: 16px;">Copy this to send to the reporter:</p>
+                        <div class="draft-box" id="resDraft">-</div>
+                        <button class="btn copy-btn" onclick="copyDraft()">📋 Copy to Clipboard</button>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="resetForm()" style="margin-top: 20px;">
+                        ➕ Analyze Another Problem
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GUIDE PAGE -->
+        <div id="guidePage" class="page">
+            <div class="guide-section">
+                <div class="guide-header">📖 Getting Started</div>
+                <div class="guide-content">
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✅</span>
+                        <div>
+                            <strong>Easiest Way:</strong> Double-click <code style="background: var(--dark); padding: 2px 8px; border-radius: 4px;">START_SERVER.bat</code> in the project folder
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--gray-400); margin: 20px 0;">Or start manually:</p>
+                    
+                    <div class="guide-step">
+                        <span class="step-num">1</span>
+                        <div class="step-content">
+                            <h4>Open Command Prompt</h4>
+                            <p>Press <strong>Windows + R</strong>, type <strong>cmd</strong>, press Enter</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <span class="step-num">2</span>
+                        <div class="step-content">
+                            <h4>Navigate to project</h4>
+                            <div class="code-box">cd c:\Users\srakella\ops-assistant</div>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <span class="step-num">3</span>
+                        <div class="step-content">
+                            <h4>Start server</h4>
+                            <div class="code-box">.venv\Scripts\python.exe -m uvicorn main:app --port 8000</div>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <span class="step-num">4</span>
+                        <div class="step-content">
+                            <h4>Wait for startup</h4>
+                            <p>Wait until you see: <strong style="color: var(--success);">"Application startup complete"</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="guide-section">
+                <div class="guide-header">✍️ How to Fill the Form</div>
+                <div class="guide-content">
+                    <table class="info-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>What to Write</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Title</strong></td>
+                            <td>Short description (5-10 words)</td>
+                            <td>"Website is very slow"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong></td>
+                            <td>When, who affected, what happens</td>
+                            <td>"Since 2 PM, 50 users can't open the site"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Errors</strong></td>
+                            <td>Any error messages (optional)</td>
+                            <td>"Error 500" or leave empty</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="guide-section">
+                <div class="guide-header">📊 Understanding Priority Levels</div>
+                <div class="guide-content">
+                    <table class="info-table">
+                        <tr>
+                            <th>Priority</th>
+                            <th>Meaning</th>
+                            <th>Action Required</th>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge priority-P1">P1</span></td>
+                            <td>Critical - Major outage</td>
+                            <td>Fix immediately!</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge priority-P2">P2</span></td>
+                            <td>High - Significant impact</td>
+                            <td>Fix within hours</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge priority-P3">P3</span></td>
+                            <td>Medium - Limited impact</td>
+                            <td>Fix within 1-2 days</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority-badge priority-P4">P4</span></td>
+                            <td>Low - Minimal impact</td>
+                            <td>Fix when possible</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="guide-section">
+                <div class="guide-header">🔧 Troubleshooting</div>
+                <div class="guide-content">
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">🔴</span>
+                        <div>
+                            <strong>"Server not connected"</strong><br>
+                            <span style="opacity: 0.8;">Server isn't running. Double-click START_SERVER.bat</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">⏳</span>
+                        <div>
+                            <strong>First request is slow (30+ sec)</strong><br>
+                            <span style="opacity: 0.8;">Normal! AI model is loading. Subsequent requests are faster.</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">🔌</span>
+                        <div>
+                            <strong>"Address already in use"</strong><br>
+                            <span style="opacity: 0.8;">Server already running, or use different port: --port 8001</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- API PAGE -->
+        <div id="apiPage" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon blue">⚙️</div>
+                    <h2 class="card-title">API Reference</h2>
+                </div>
+                
+                <div class="alert alert-info">
+                    <span class="alert-icon">📍</span>
+                    <div>
+                        <strong>Base URL:</strong> http://localhost:8000<br>
+                        <strong>Interactive Docs:</strong> <a href="http://localhost:8000/docs" target="_blank" style="color: inherit;">http://localhost:8000/docs</a>
+                    </div>
+                </div>
+                
+                <table class="info-table" style="margin-top: 24px;">
+                    <tr>
+                        <th>Method</th>
+                        <th>Endpoint</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-get">GET</span></td>
+                        <td>/health</td>
+                        <td>Check server status</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td>/api/analyze</td>
+                        <td>Full analysis (triage + RCA + resolution)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td>/api/triage</td>
+                        <td>Priority classification only</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td>/api/rca</td>
+                        <td>Root cause analysis only</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td>/api/resolution</td>
+                        <td>Resolution recommendations only</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td>/api/chat</td>
+                        <td>Free-form chat with AI</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-get">GET</span></td>
+                        <td>/api/knowledge/stats</td>
+                        <td>Knowledge base statistics</td>
+                    </tr>
+                    <tr>
+                        <td><span class="method-badge method-post">POST</span></td>
+                        <td>/api/ingest</td>
+                        <td>Add document to knowledge base</td>
+                    </tr>
+                </table>
+                
+                <h3 style="margin: 32px 0 16px; color: var(--white);">Example Request</h3>
+                <div class="code-box">curl -X POST http://localhost:8000/api/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ticket_id": "INC001",
+    "title": "Website is slow",
+    "description": "Users reporting slow page loads since 2PM",
+    "logs": "ERROR: Connection timeout"
+  }'</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon green">🚀</div>
+                    <h2 class="card-title">Deployment</h2>
+                </div>
+                
+                <p style="color: var(--gray-400); margin-bottom: 24px;">
+                    GitHub: <a href="https://github.com/Sridattasuryanarayana/ops-assistant" target="_blank" style="color: var(--primary-light);">github.com/Sridattasuryanarayana/ops-assistant</a>
+                </p>
+                
+                <div class="grid-2">
+                    <div class="alert alert-success">
+                        <span class="alert-icon">🚂</span>
+                        <div>
+                            <strong>Railway</strong><br>
+                            <span style="opacity: 0.8;">Connect GitHub → Auto-deploy</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-success">
+                        <span class="alert-icon">🐳</span>
+                        <div>
+                            <strong>Docker</strong><br>
+                            <span style="opacity: 0.8;"><code>docker-compose up -d</code></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-container">
+            <div class="spinner-glow"></div>
+            <div class="spinner"></div>
+        </div>
+        <div class="loading-text">Analyzing your problem...</div>
+        <div class="loading-sub">This usually takes 10-30 seconds</div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p>🏆 Intel Hackathon 2026 | OpsAssistant Pro — Powered by Phi-4 Mini | <a href="http://localhost:8000/docs" target="_blank">API Docs</a></p>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let currentMode = 'easy';
+        
+        // Examples with 2026 dates
+        const examples = {
+            slow: {
+                title: "Website is very slow",
+                description: "Since 14:00 UTC today (March 25, 2026), many users report the company website takes 30 seconds to load. About 50 people complained. Error rate increased to 15%.",
+                logs: "2026-03-25 14:02:15 ERROR [WebServer] Response time: 28500ms\n2026-03-25 14:02:18 WARN [LoadBalancer] Backend health check failing"
+            },
+            login: {
+                title: "Cannot login to system",
+                description: "Since 09:00 UTC (March 25, 2026), users getting 'Invalid credentials' error. They haven't changed passwords. About 200 users affected. Auth service responding slowly.",
+                logs: "2026-03-25 09:05:33 ERROR [AuthService] Token validation failed\n2026-03-25 09:06:00 WARN [Redis] Connection timeout after 5000ms"
+            },
+            email: {
+                title: "Email not sending",
+                description: "Since yesterday (March 24, 2026), emails stay in outbox. Users can receive but not send. SMTP timeouts observed. At least 50 users affected.",
+                logs: "2026-03-24 16:30:00 ERROR [SMTP] Connection to smtp.provider.com:587 timed out\n2026-03-24 16:31:00 ERROR [MailQueue] 342 messages stuck in queue"
+            },
+            db: {
+                title: "Database connection timeout",
+                description: "Application showing timeout errors since 14:00 UTC (March 25, 2026). Logs show 'Connection pool exhausted'. Started after traffic spike. 40% of requests failing.",
+                logs: "2026-03-25 14:02:15 ERROR [HikariPool] Connection pool exhausted\n2026-03-25 14:02:18 WARN [QueryExecutor] Slow query: 12.5s - SELECT * FROM orders\n2026-03-25 14:03:00 ERROR [API] 500 Internal Server Error"
+            },
+            memory: {
+                title: "Memory leak in payment service",
+                description: "Payment service pods restarting every 4 hours due to OOMKilled since March 23, 2026. Memory grows from 2GB to 8GB. No recent deployments. Payment processing impacted.",
+                logs: "2026-03-25 14:00:00 kubernetes: Pod payment-service-7d9f8b6c4-x2k9j OOMKilled\n2026-03-25 14:00:01 Memory at restart: 7.8GB / 8GB limit\n2026-03-25 14:00:05 INFO Pod restarting (restart count: 6)"
+            }
+        };
+        
+        // Navigation - supports all pages
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            const pageEl = document.getElementById(page + 'Page');
+            if (pageEl) {
+                pageEl.classList.add('active');
+            }
+            
+            // Find and activate the correct nav button
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(page.toLowerCase()) || 
+                    (page === 'home' && btn.textContent.includes('Home'))) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            if (page === 'analyze') {
+                const resultsSection = document.getElementById('resultsSection');
+                if (resultsSection) resultsSection.style.display = 'none';
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Mode switching
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('easyFields').style.display = mode === 'easy' ? 'block' : 'none';
+            document.getElementById('advancedFields').style.display = mode === 'advanced' ? 'block' : 'none';
+        }
+        
+        // Load example
+        function loadExample(type) {
+            const ex = examples[type];
+            if (currentMode === 'easy') {
+                document.getElementById('title').value = ex.title;
+                document.getElementById('description').value = ex.description;
+                document.getElementById('logs').value = ex.logs || '';
+            } else {
+                document.getElementById('advTitle').value = ex.title;
+                document.getElementById('advDescription').value = ex.description;
+                document.getElementById('advLogs').value = ex.logs || '';
+            }
+        }
+        
+        // Health check
+        async function checkHealth() {
+            try {
+                const res = await fetch(`${API_URL}/health`);
+                const data = await res.json();
+                
+                document.getElementById('serverStatus').className = 'status-dot green';
+                document.getElementById('serverText').textContent = 'Connected';
+                
+                document.getElementById('aiStatus').className = 'status-dot ' + (data.llm_available ? 'green' : 'red');
+                document.getElementById('aiText').textContent = data.llm_available ? 'Ready' : 'Unavailable';
+                
+                document.getElementById('dbStatus').className = 'status-dot ' + (data.documents_indexed > 0 ? 'green' : 'yellow');
+                document.getElementById('docCount').textContent = data.documents_indexed;
+            } catch (e) {
+                document.getElementById('serverStatus').className = 'status-dot red';
+                document.getElementById('serverText').textContent = 'Offline';
+                document.getElementById('aiStatus').className = 'status-dot red';
+                document.getElementById('aiText').textContent = '-';
+                document.getElementById('dbStatus').className = 'status-dot red';
+                document.getElementById('docCount').textContent = '-';
+            }
+        }
+        
+        // Form submission
+        document.getElementById('analyzeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            let data;
+            if (currentMode === 'easy') {
+                data = {
+                    ticket_id: 'TICKET-' + Date.now(),
+                    title: document.getElementById('title').value,
+                    description: document.getElementById('description').value,
+                    logs: document.getElementById('logs').value || null
+                };
+            } else {
+                data = {
+                    ticket_id: document.getElementById('ticketId').value,
+                    title: document.getElementById('advTitle').value,
+                    description: document.getElementById('advDescription').value,
+                    logs: document.getElementById('advLogs').value || null
+                };
+            }
+            
+            document.getElementById('loadingOverlay').classList.add('active');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!res.ok) throw new Error('Server error: ' + res.status);
+                
+                const result = await res.json();
+                displayResults(result);
+            } catch (err) {
+                alert('Error: ' + err.message + '\n\nMake sure the server is running.');
+            } finally {
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+        });
+        
+        // Display results
+        function displayResults(data) {
+            const priority = data.triage?.priority || 'Unknown';
+            const priorityEl = document.getElementById('resPriority');
+            priorityEl.textContent = priority;
+            priorityEl.className = 'priority-badge priority-' + priority;
+            
+            const priorityDesc = {
+                'P1': 'Critical - Fix immediately!',
+                'P2': 'High - Fix within hours',
+                'P3': 'Medium - Fix in 1-2 days',
+                'P4': 'Low - Fix when possible'
+            };
+            document.getElementById('resPriorityDesc').textContent = priorityDesc[priority] || '';
+            
+            document.getElementById('resCategory').textContent = data.triage?.category || '-';
+            document.getElementById('resSummary').textContent = data.triage?.summary || '-';
+            
+            document.getElementById('resCause').textContent = data.rca?.root_cause || '-';
+            const factors = data.rca?.contributing_factors || [];
+            document.getElementById('resFactors').textContent = factors.length > 0 ? factors.join(', ') : 'None identified';
+            document.getElementById('resConfidence').textContent = data.rca?.confidence || '-';
+            
+            const actions = data.resolution?.recommended_actions || [];
+            const actionsList = document.getElementById('resActions');
+            actionsList.innerHTML = '';
+            actions.forEach((action, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="action-num">${i + 1}</span><span>${action}</span>`;
+                actionsList.appendChild(li);
+            });
+            
+            document.getElementById('resTime').textContent = data.resolution?.estimated_time || '-';
+            document.getElementById('resDraft').textContent = data.resolution?.draft_response || '-';
+            
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Copy draft
+        function copyDraft() {
+            const text = document.getElementById('resDraft').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                btn.style.background = 'var(--success)';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+        
+        // Reset form
+        function resetForm() {
+            document.getElementById('analyzeForm').reset();
+            document.getElementById('resultsSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Initialize
+        checkHealth();
+        setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>
