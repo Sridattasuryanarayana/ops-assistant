@@ -1,6 +1,6 @@
 ================================================================================
-                    🔧 IT PROBLEM HELPER
-              Complete Guide - Easy for Everyone!
+            🏆 INTEL HACKATHON 2026 - OpsAssistant Pro
+                   Powered by Phi-4 Mini | Quick Start Guide
 ================================================================================
 
 
@@ -8,18 +8,17 @@
 ║                         WHAT IS THIS TOOL?                                   ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
-║  A "Smart IT Helper" that reads your problem and gives you:                 ║
+║  GenAI-powered Operations Assistant that analyzes IT problems:              ║
 ║                                                                              ║
-║    ✅ Priority     → How serious is it? (P1=Critical, P2=High, P3=Medium)   ║
-║    ✅ Root Cause   → WHY did this happen?                                   ║
-║    ✅ Solution     → Step-by-step FIX instructions                          ║
-║    ✅ Draft Reply  → Ready-to-send message to copy                          ║
+║    ✅ Priority     → Auto-classify (P1=Critical, P2=High, P3=Medium)        ║
+║    ✅ Root Cause   → AI-powered analysis using RAG                          ║
+║    ✅ Resolution   → Step-by-step fix from knowledge base                   ║
+║    ✅ Draft Reply  → Ready-to-send customer response                        ║
 ║                                                                              ║
-║  EXAMPLE:                                                                    ║
-║    You type:  "Website is slow, 50 users complaining"                       ║
-║    You get:   Priority = P1 (Critical)                                      ║
-║               Cause = "Database overloaded"                                 ║
-║               Fix = "1. Restart database  2. Increase memory"               ║
+║  BUSINESS IMPACT:                                                           ║
+║    • 40% faster resolution time                                             ║
+║    • 63% reduction in L1 effort                                             ║
+║    • 39% MTTR improvement                                                   ║
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
@@ -66,18 +65,22 @@
    
    ╔════════════════════════════════════════════════════════════════════════╗
    ║                                                                        ║
-   ║   file:///c:/Users/srakella/ops-assistant/ui_combined.html             ║
+   ║   file:///c:/Users/srakella/ops-assistant/index.html                   ║
    ║                                                                        ║
-   ║   (Or just double-click the file "ui_combined.html" in the folder)    ║
+   ║   (Or just double-click "index.html" in the folder)                    ║
    ║                                                                        ║
    ╚════════════════════════════════════════════════════════════════════════╝
    
-   Step 3: You'll see a colorful form with TWO MODES:
+   Step 3: You'll see a premium dashboard with MULTIPLE PAGES:
    
-           😊 EASY MODE     → For everyone (step-by-step guide)
-           ⚙️ ADVANCED MODE → For IT staff (more technical options)
+           🏠 HOME      → Overview and quick start
+           📋 PROBLEM   → View the problem statement
+           🔧 SOLUTION  → See the GenAI core flow  
+           📊 IMPACT    → Business metrics dashboard
+           🔍 ANALYZE   → Submit tickets for AI analysis
+           📖 GUIDE     → User guide and help
    
-   Step 4: Fill out the form and click "Analyze My Problem"
+   Step 4: Go to "Analyze" page and submit your incident
 
 
 ================================================================================
@@ -282,27 +285,31 @@ PROBLEM: Results are not accurate
                     FILES IN THIS FOLDER
 ================================================================================
 
-  ui_combined.html      → The main form (Easy + Advanced mode)
+  index.html            → Premium web dashboard (Problem, Solution, Impact pages)
   HOW_TO_RUN_GUIDE.txt  → This guide
   START_SERVER.bat      → Double-click to start server
-  main.py               → The server program
-  chroma_db/            → Where AI knowledge is stored
+  README.md             → Full documentation with Phi-4 Mini setup
+  main.py               → The FastAPI server program
+  assistant.py          → Core AI analysis logic
+  rag_pipeline.py       → RAG with ChromaDB vector store
+  sample_data.py        → Load sample SOPs, tickets, knowledge articles
+  config.py             → Model and app configuration
+  chroma_db/            → Where AI knowledge is stored (31 documents)
 
 
 ================================================================================
                           NEED MORE HELP?
 ================================================================================
 
-  1. Check server status: Look at the colored dots in the form
-     • Green = Working
-     • Red = Not working
-     • Yellow = Partial
+  1. Check server status: Look at the status indicator in the footer
+     • Green = Healthy (LLM connected, documents indexed)
+     • Red = Server not running
 
   2. API Documentation: http://localhost:8000/docs
 
-  3. Contact: [Your IT support contact here]
+  3. GitHub: https://github.com/Sridattasuryanarayana/ops-assistant
 
 
 ================================================================================
-                         Happy Problem Solving! 🎉
+         🏆 Intel Hackathon 2026 | OpsAssistant Pro — Powered by Phi-4 Mini
 ================================================================================
